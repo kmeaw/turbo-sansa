@@ -1,5 +1,6 @@
 var PORT = 40001;
 var TARGETS = ['127.0.0.1:40002', '127.0.0.1:40003'];
+var N = 30000;
 var dgram = require('dgram');
 var server = dgram.createSocket('udp4');
 var clients = TARGETS.map(function(){ return dgram.createSocket("udp4") });
@@ -25,6 +26,7 @@ broadcast(id);
 
 server.on("message", function (msg, rinfo) {
   id.writeUInt16BE(value++, 0);
+  value = value % N;
   var message = Buffer.concat([id, msg]);
   broadcast(message);
 });
